@@ -1,0 +1,118 @@
+/* common */
+button {
+  margin-right: 5px;
+}
+button:focus {
+  outline: none;
+}
+button.active {
+  background: #6a6766;
+  border: 1px solid #6a6766;
+  color: #f0f0f0;
+}
+a {
+  text-decoration: none;
+  color: blue;
+}
+p.note {
+  font-weight: 600;
+  font-size: 14px;
+  color: #a4262c;
+}
+.red {
+  background: #ef6950;
+}
+.yellow {
+  background: #ffc83d;
+}
+.green {
+  background: #00b294;
+}
+.blue {
+  background: #3a96dd;
+}
+.purple {
+  background: #9c89e9;
+}
+.gray {
+  background: #b1adab;
+}
+.glod {
+  background: #986f0b;
+}
+.orange {
+  background: #ca5010;
+}
+.black {
+  background-color: black;
+}
+.tab-header {
+  display: flex;
+  border-bottom: 1px solid #333;
+}
+.tab-header > div {
+  font-size: 2em;
+  font-weight: bold;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.tab-header > div.active {
+  border-bottom: 2px solid #0078d4;
+}
+.tab-header > div:hover {
+  background-color: #f0f0f0;
+}
+.tab-content {
+  padding: 10px;
+}
+.container {
+  display: flex;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #333;
+  box-sizing: border-box;
+}
+.item {
+  width: 100px;
+  padding: 10px;
+  text-align: center;
+  font-size: 28px;
+  color: white;
+  box-sizing: border-box;
+}
+/* container: flex-wrap */
+.container-wrap {
+  width: 280px;
+}
+/* container: justify-content */
+.container-justify-content {
+  padding: 0;
+}
+/* container: align-items */
+.container-align-items {
+  height: 200px;
+  padding: 0px;
+}
+/* container: align-content */
+.container-align-content {
+  width: 320px;
+  height: 320px;
+  flex-wrap: wrap;
+  padding: 0;
+}
+/* item: order */
+.container-order {
+  flex-wrap: wrap;
+}
+/* item: flex-shrink */
+.container-shrink {
+  width: 500px;
+}
+.item-shrink {
+  font-size: 14px;
+}
+/* item: align-self */
+.container-align-self {
+  height: 200px;
+  padding: 0;
+}

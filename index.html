@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flex</title>
+    <link rel="stylesheet" href="./index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="tab-header">
+        <div
+          v-for="(item, index) in tabList"
+          :key="index"
+          :class="{active: tab === item.key}"
+          @click="tab=item.key"
+        >
+          {{item.name}}
+        </div>
+      </div>
+      <div class="tab-content">
+        <div v-show="tab==='container'">
+          <h3>1> flex-direction</h3>
+          <button
+            v-for="(item, index) in flexDirectionButtons"
+            :key="item.index"
+            @click="clickFlexDirectionButton(item.name)"
+            :class="{active: item.name === flexDirection}"
+          >
+            {{item.name}}
+          </button>
+          <div class="container" :style="{flexDirection: flexDirection}">
+            <div
+              v-for="(item, index) in directionList"
+              :key="index"
+              :class="['item', item.color]"
+            >
+              {{item.name}}
+            </div>
+          </div>
+
+          <h3>2> flex-wrap</h3>
+          <button
+            v-for="(item, index) in flexWrapButtons"
+            :key="item.index"
+            @click="clickFlexWrapButton(item.name)"
+            :class="{active: item.name === flexWrap}"
+          >
+            {{item.name}}
+          </button>
+          <p class="note">容器宽度 280px, 项目宽度为100px</p>
+          <div class="container container-wrap" :style="{flexWrap: flexWrap}">
+            <div
+              v-for="(item, index) in wrapList"
+              :key="index"
+              :class="['item', item.color]"
+            >
+              {{item.name}}
+            </div>
+          </div>
+
+          <h3>3> flex-flow</h3>
+          <div class="container">
+            flex-flow 属性是 flex-direction 和 flex-wrap 的简写。
+            <br />
+            Formal syntax: <'flex-direction'> || <'flex-wrap'>
+          </div>
+
+          <h3>4> justify-content</h3>
+          <button
+            v-for="(item, index) in justifyContentButtons"
+            :key="item.index"
+            @click="clickJustifyContentButton(item.name)"
+            :class="{active: item.name === justifyContent}"
+          >
+            {{item.name}}
+          </button>
+          <p class="note">主轴为水平方向时测试，即 flex-direction: row</p>
+          <div
+            class="container container-justify-content"
+            :style="{justifyContent: justifyContent}"
+          >
+            <div
+              v-for="(item, index) in justifyContentList"
+              :key="index"
+              :class="['item', item.color]"
+            >
+              {{item.name}}
+            </div>
+          </div>
+
+          <h3>5> align-items</h3>
+          <button
+            v-for="(item, index) in alignItemsButtons"
+            :key="item.index"
+            @click="clickAlignItemsButton(item.name)"
+            :class="{active: item.name === alignItems}"
+          >
+            {{item.name}}
+          </button>
+          <p class="note">
+            主轴为水平方向时测试，即 flex-direction: row, 交叉轴从上到下
+            <br />
+            这里给每个项目分别设置高度 30px, 60px, ... 180px。因此选择 stretch
+            并没有充满容器。
+          </p>
+          <div
+            class="container container-align-items"
+            :style="{alignItems: alignItems}"
+          >
+            <div
+              v-for="(item, index) in alignItemsList"
+              :key="index"
+              :class="['item', item.color]"
+              :style="{height: item.height}"
+            >
+              {{item.name}}
+            </div>
+          </div>
+
+          <h3>6> align-content</h3>
+          <button
+            v-for="(item, index) in alignContentButtons"
+            :key="item.index"
+            @click="clickAlignContentButton(item.name)"
+            :class="{active: item.name === alignContent}"
+          >
+            {{item.name}}
+          </button>
+          <p class="note">
+            主轴为水平方向时测试，即 flex-direction: row, flex-wrap: wrap
+            <br />
+            容器宽度 320px, 高度 320px, 项目宽度为 100px
+          </p>
+          <div
+            class="container container-align-content"
+            :style="{alignContent: alignContent}"
+          >
+            <div
+              v-for="(item, index) in alignContentList"
+              :key="index"
+              :class="['item', item.color]"
+            >
+              {{item.name}}
+            </div>
+          </div>
+        </div>
+        <div v-show="tab==='item'">
+          <h3>1> order</h3>
+          <input v-model.number="order" @keyup.enter="addItemWithOrder" />
+          <button @click="addItemWithOrder">Add Item with order</button>
+          <button @click="clearItemWithOrder">Clear the added item</button>
+          <div class="container container-order">
+            <div
+              v-for="(item, index) in orderList"
+              :key="index"
+              :class="['item', item.color]"
+              :style="{order: item.order}"
+            >
+              {{item.name}}
+            </div>
+          </div>
+
+          <h3>2> flex-grow</h3>
+          <div class="container">
+            <div
+              v-for="(item, index) in growList"
+              :key="index"
+              :class="['item', item.color]"
+            >
+              grow: 0
+            </div>
+          </div>
+          <div class="container">
+            <div
+              v-for="(item, index) in growList"
+              :key="index"
+              :class="['item', item.color]"
+              :style="{flexGrow: item.grow}"
+            >
+              {{item.name}}
+            </div>
+          </div>
+
+          <h3>3> flex-shrink</h3>
+          <p class="note">容器宽度 500px, 项目宽度为100px</p>
+          <div class="container container-shrink">
+            <div
+              v-for="(item, index) in shrinkList"
+              :key="index"
+              :class="['item', 'item-shrink', item.color]"
+              style="flex-shrink: 1"
+            >
+              shrink: 1
+            </div>
+          </div>
+          <div class="container container-shrink">
+            <div
+              v-for="(item, index) in shrinkList"
+              :key="index"
+              :class="['item', 'item-shrink', item.color]"
+              style="flex-shrink: 0"
+            >
+              shrink: 0
+            </div>
+          </div>
+
+          <h3>4> flex-basis</h3>
+          <div class="container">
+            flex-basis 属性指定了 flex 元素在主轴方向上的初始大小。
+            <br />
+            Formal syntax: content || <'width'>
+          </div>
+
+          <h3>5> flex</h3>
+          <div class="container">
+            flex 属性是 flex-grow | flex-shrink | flex-basis 的简写。
+            取值写法支持多种，详见&nbsp;
+            <a href="https://www.jianshu.com/p/a74b58fe37d6">Flex 布局</a>
+          </div>
+
+          <h3>6> align-self</h3>
+          <div class="container container-align-self">
+            <div
+              v-for="(item, index) in alignSelfList"
+              :key="index"
+              :class="['item', item.color]"
+              :style="{alignSelf: item.alignSelf}"
+            >
+              {{item.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          tab: "item",
+          tabList: [
+            { name: "Flex容器属性", key: "container" },
+            { name: "Flex项目属性", key: "item" },
+          ],
+          itemList: [
+            { name: "1", color: "red" },
+            { name: "2", color: "yellow" },
+            { name: "3", color: "green" },
+            { name: "4", color: "blue" },
+            { name: "5", color: "purple" },
+            { name: "6", color: "gray" },
+            { name: "7", color: "glod" },
+            { name: "8", color: "orange" },
+          ],
+          flexDirection: "row",
+          flexDirectionButtons: [
+            { name: "row" },
+            { name: "row-reverse" },
+            { name: "column" },
+            { name: "column-reverse" },
+          ],
+          flexWrap: "nowrap",
+          flexWrapButtons: [
+            { name: "nowrap" },
+            { name: "wrap" },
+            { name: "wrap-reverse" },
+          ],
+          justifyContent: "flex-start",
+          justifyContentButtons: [
+            { name: "flex-start" },
+            { name: "flex-end" },
+            { name: "center" },
+            { name: "space-between" },
+            { name: "space-around" },
+          ],
+          alignItems: "stretch",
+          alignItemsButtons: [
+            { name: "flex-start" },
+            { name: "flex-end" },
+            { name: "center" },
+            { name: "baseline" },
+            { name: "stretch" },
+          ],
+          alignContent: "stretch",
+          alignContentButtons: [
+            { name: "flex-start" },
+            { name: "flex-end" },
+            { name: "center" },
+            { name: "space-between" },
+            { name: "space-around" },
+            { name: "stretch" },
+          ],
+          order: 0,
+        },
+        computed: {
+          directionList: function () {
+            return _.slice(this.itemList, 0, 3);
+          },
+          wrapList: function () {
+            return _.slice(this.itemList, 0, 5);
+          },
+          justifyContentList: function () {
+            return _.slice(this.itemList, 0, 6);
+          },
+          alignItemsList: function () {
+            return _.map(_.slice(this.itemList, 0, 6), (item, index) => {
+              return {
+                ...item,
+                height: `${30 * (index + 1)}px`,
+              };
+            });
+          },
+          alignContentList: function () {
+            return _.slice(this.itemList, 0);
+          },
+          orderList: function () {
+            return _.map(this.itemList, (item, index) => {
+              const order = _.get(item, "order", index);
+              return {
+                ...item,
+                name: `order: ${order}`,
+                order,
+              };
+            });
+            return originalList;
+          },
+          growList: function () {
+            return _.map(_.slice(this.itemList, 0, 4), (item, index) => {
+              return {
+                ...item,
+                name: `grow: ${index}`,
+                grow: index,
+              };
+            });
+          },
+          shrinkList: function () {
+            return _.slice(this.itemList, 0);
+          },
+          alignSelfList: function () {
+            const alignSelfArr = ["flex-start", "flex-end", "center"];
+            return _.map(this.itemList, (item, index) => {
+              return {
+                ...item,
+                alignSelf: _.get(alignSelfArr, [index], ""),
+                name: _.get(alignSelfArr, [index], item.name),
+              };
+            });
+          },
+        },
+        methods: {
+          clickFlexDirectionButton: function (name) {
+            this.flexDirection = name;
+          },
+          clickFlexWrapButton: function (name) {
+            this.flexWrap = name;
+          },
+          clickJustifyContentButton: function (name) {
+            this.justifyContent = name;
+          },
+          clickAlignItemsButton: function (name) {
+            this.alignItems = name;
+          },
+          clickAlignContentButton: function (name) {
+            this.alignContent = name;
+          },
+          addItemWithOrder: function () {
+            if (this.order === "") return;
+            this.itemList.push({
+              order: this.order,
+              name: `order: ${this.order}`,
+              color: "black",
+            });
+          },
+          clearItemWithOrder: function () {
+            this.itemList = _.filter(
+              this.itemList,
+              (item) => !_.isNumber(item.order)
+            );
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
